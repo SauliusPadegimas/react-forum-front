@@ -23,7 +23,7 @@ function Topics() {
         <div className='fitVH topic__page'>
           {topics.map((x, ind) => (
             <Link key={ind} to={`/${x.title}`}>
-              <div className='topic' onClick={() => setTopic(x.id)}>
+              <div className='topic'>
                 <div className='topic__title'>{x.title}</div>
                 <div className='topic__count'>discussions: {x.length}</div>
               </div>

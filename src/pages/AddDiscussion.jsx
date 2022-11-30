@@ -1,15 +1,16 @@
 import React, { useContext, useRef, useState, useEffect } from 'react';
-import { AiFillCheckCircle, AiFillCloseCircle } from 'react-icons/ai';
+import { AiFillCloseCircle } from 'react-icons/ai';
 import MainContext from '../components/MainContext';
 import { useNavigate, useParams } from 'react-router-dom';
 
 function AddDiscussion() {
   const { topicName } = useParams();
+  const [topicId, setTopicId] = useState(null);
   const [serverResp, setServerResp] = useState({
     error: false,
     message: null,
   });
-  const { socket, topic, setDiscussion } = useContext(MainContext);
+  const { socket } = useContext(MainContext);
   const nav = useNavigate();
   const titleRef = useRef();
   const textRef = useRef();
@@ -17,8 +18,10 @@ function AddDiscussion() {
   function sendDiscussion(e) {
     e.preventDefault();
     const secret = localStorage.getItem('secret');
+    let topic = '';
+
     const discObj = {
-      topicId: topic,
+      topicId: topicId,
       title: titleRef.current.value,
       text: textRef.current.value,
       secret,
@@ -27,8 +30,10 @@ function AddDiscussion() {
   }
 
   useEffect(() => {
+    socket.emit('topics', topicName);
+    socket.on('oneTopic', (respTopic) => setTopicId(respTopic.id));
     socket.on('serverError', (data) => setServerResp(data));
-    socket.on('addDisc', (discid, postid) => nav(`/${topicName}/${discid}/${postid}`));
+    socket.on('addDisc', (discid) => nav(`/${topicName}/${discid}`));
   }, []);
 
   return (

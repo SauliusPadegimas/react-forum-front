@@ -1,11 +1,12 @@
 import React, { useContext, useEffect } from 'react';
 import { AiFillHome, AiOutlineLogout } from 'react-icons/ai';
 import { BsFillPersonFill } from 'react-icons/bs';
-import { Outlet, Link, useNavigate } from 'react-router-dom';
+import { Outlet, Link, useNavigate, useParams } from 'react-router-dom';
 import MainContext from '../components/MainContext';
 
 function Home() {
   const { user, setUser } = useContext(MainContext);
+  const { topicName } = useParams();
 
   const nav = useNavigate();
 
@@ -18,8 +19,7 @@ function Home() {
     const resp = await fetch(`http://localhost:4000/api/users/${secret}`);
     const data = await resp.json();
     if (!data.error) {
-      console.log('resp from server ===', data);
-      setUser(data.username);
+      setUser(data.user);
     } else {
       console.log('resp from server ===', data);
       nav('/login');
@@ -47,7 +47,7 @@ function Home() {
           </div>
           <div className='header__side header__side--right'>
             <div className='header__profile'>
-              <BsFillPersonFill className='icon icon--profile' /> {user}
+              <BsFillPersonFill className='icon icon--profile' /> {user.username}
             </div>
             <div className='btn btn--shadow btn--grey' onClick={logoutUser}>
               <AiOutlineLogout className='icon icon--logout' /> Logout
