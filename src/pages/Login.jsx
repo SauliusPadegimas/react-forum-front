@@ -1,7 +1,8 @@
-import { useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AiFillCheckCircle, AiFillCloseCircle } from 'react-icons/ai';
 import Loading from '../components/Loading';
+import MainContext from '../components/MainContext';
 
 function Login() {
   const [serverResp, setServerResp] = useState({
@@ -9,6 +10,7 @@ function Login() {
     message: null,
   });
   const [loading, setLoading] = useState(true);
+  const { socket } = useContext(MainContext);
 
   const regName = useRef();
   const regPass1 = useRef();
@@ -51,6 +53,7 @@ function Login() {
       setServerResp(data);
     } else {
       localStorage.setItem('secret', data.secret);
+      socket.emit('logedUsers', data.userId);
       nav('/');
     }
   }

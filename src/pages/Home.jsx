@@ -2,28 +2,18 @@ import React, { useContext, useEffect } from 'react';
 import { AiFillHome, AiOutlineLogout } from 'react-icons/ai';
 import { BsFillPersonFill } from 'react-icons/bs';
 import { Outlet, Link, useNavigate, useParams } from 'react-router-dom';
+import BreadCrumbs from '../components/BreadCrumbs';
 import MainContext from '../components/MainContext';
 
 function Home() {
-  const { user, setUser } = useContext(MainContext);
-  const { topicName } = useParams();
+  const { user, socket, fetchUser, setLogedUsers } = useContext(MainContext);
 
   const nav = useNavigate();
 
   function logoutUser() {
     localStorage.removeItem('secret');
-    nav('/login');
-  }
-
-  async function fetchUser(secret) {
-    const resp = await fetch(`http://localhost:4000/api/users/${secret}`);
-    const data = await resp.json();
-    if (!data.error) {
-      setUser(data.user);
-    } else {
-      console.log('resp from server ===', data);
-      nav('/login');
-    }
+    socket.emit('forceDisconnect', 'logout');
+    window.location.reload(false);
   }
 
   useEffect(() => {
@@ -33,6 +23,11 @@ function Home() {
     }
     fetchUser(secret);
   }, []);
+
+  useEffect(() => {
+    socket.on('logedUsers', (arr) => setLogedUsers(arr));
+  }, []);
+
   return (
     <div>
       <header className='header'>
@@ -46,9 +41,11 @@ function Home() {
             </Link>
           </div>
           <div className='header__side header__side--right'>
-            <div className='header__profile'>
-              <BsFillPersonFill className='icon icon--profile' /> {user.username}
-            </div>
+            <Link to='/user'>
+              <div className='header__profile'>
+                <BsFillPersonFill className='icon icon--profile' /> {user.username}
+              </div>{' '}
+            </Link>
             <div className='btn btn--shadow btn--grey' onClick={logoutUser}>
               <AiOutlineLogout className='icon icon--logout' /> Logout
             </div>
@@ -57,6 +54,7 @@ function Home() {
         </div>
       </header>
       <div className='container'>
+        <BreadCrumbs />
         <Outlet />
       </div>
       <footer className='footer'>Saulius Padegimas &copy; 2022</footer>

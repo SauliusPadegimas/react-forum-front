@@ -73,13 +73,14 @@ html {
 }
 
 .fitVH {
-  min-height: calc(100vh - 9.7rem - 3.8rem);
+  min-height: calc(100vh - 9.7rem - 6rem);
 }
 
 .popup {
   display: flex;
   justify-content: center;
   align-items: center;
+  margin: 1rem auto;
 }
 
 /* @@@ LOGIN PAGE @@@ */
@@ -218,11 +219,38 @@ html {
   font-size: 2rem;
 }
 
+/* %%% BREADCRUMBS %%% */
+ul.breadcrumb {
+  padding: 10px 16px;
+  list-style: none;
+  background-color: #eee;
+}
+
+ul.breadcrumb li {
+  display: inline;
+  font-size: 18px;
+}
+
+ul.breadcrumb li + li:before {
+  padding: 8px;
+  color: var(--text-primary);
+  content: '/\00a0';
+}
+
+ul.breadcrumb li a {
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+ul.breadcrumb li a:hover {
+  color: #01447e;
+  text-decoration: underline;
+}
 /* ### TOPIC PAGE ### */
 
 .topic__page {
   max-width: 1000px;
-  margin: 2rem auto;
+  margin: 1rem auto;
 }
 
 .topic {
@@ -297,7 +325,7 @@ html {
 
 .post__left {
   color: var(--color-primary);
-  flex: 1;
+  width: 20rem;
   border-right: 1px solid var(--color-primary);
 }
 
@@ -307,14 +335,20 @@ html {
   text-align: center;
 }
 
+.left__bottom {
+  display: flex;
+  justify-content: center;
+}
+
 .left__bottom img {
-  max-height: 200px;
+  height: 20rem;
+  width: 20rem;
   object-fit: contain;
 }
 
 .post__right {
   color: var(--text-primary);
-  flex: 5;
+  flex: 15;
 }
 
 .right__top {
@@ -354,16 +388,19 @@ html {
 }
 
 .postReply__left {
-  flex: 1;
+  display: flex;
+  justify-content: center;
+  width: 20rem;
 }
 
 .postReply__left img {
-  max-height: 200px;
+  max-height: 20rem;
+  max-width: 20rem;
   object-fit: contain;
 }
 
 .postReply__right {
-  flex: 5;
+  flex: 1;
   padding: 1rem;
   display: flex;
   flex-direction: column;
@@ -377,6 +414,7 @@ html {
 }
 
 .postReply__area {
+  border: none;
   width: 100%;
   display: block;
   margin-bottom: 1rem;
@@ -441,6 +479,23 @@ blockquote .closeX {
 .user__score {
   color: var(--color-primary);
   font-size: 2rem;
+}
+
+.leader__board {
+  display: inline-block;
+  padding: 1rem;
+  margin-left: 18rem;
+  background-color: var(--color-tertiary);
+}
+
+table {
+  width: 100%;
+  text-align: left;
+  font-size: 1.6rem;
+}
+
+th {
+  background-color: var(--text-primary);
 }
 
 /* &&& FOOTER &&& */

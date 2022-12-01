@@ -1,11 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { FaReply } from 'react-icons/fa';
+import { FaReply, FaCircle } from 'react-icons/fa';
 import DateToLocal from '../components/Date';
 import MainContext from './MainContext';
 
 function Post({ post, subject, SetReplying, scrollToBottom }) {
   const [reply, setReply] = useState(null);
-  const { socket } = useContext(MainContext);
+  const { socket, logedUsers } = useContext(MainContext);
   useEffect(() => {
     if (post.replying) {
       socket.emit('post', post.replying);
@@ -18,7 +18,15 @@ function Post({ post, subject, SetReplying, scrollToBottom }) {
     <div className='post'>
       <div className='post__left'>
         <div className='left__top'>
-          <h2>{post.username}</h2>
+          <h2>
+            {post.username}{' '}
+            <FaCircle
+              style={{
+                color: logedUsers.some((obj) => obj.userId === post.UserId) ? 'green' : 'red',
+                fontSize: '1.2rem',
+              }}
+            />
+          </h2>
         </div>
         <div className='left__bottom'>
           <img src={post.image} alt='user avatar' />

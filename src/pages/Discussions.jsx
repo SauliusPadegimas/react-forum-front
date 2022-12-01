@@ -14,7 +14,6 @@ function Discussions() {
     socket.emit('discussions', topicName);
     socket.on('discussions', (data) => {
       discussions = data;
-      console.log('discussions ===', discussions);
       setLoading(false);
     });
   }, [socket, topicName]);

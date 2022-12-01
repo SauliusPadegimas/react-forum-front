@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useNavigate } from 'react-router-dom';
 import { io } from 'socket.io-client';
 import MainContext from './components/MainContext';
 import AddDiscussion from './pages/AddDiscussion';
@@ -14,15 +14,29 @@ const socket = io.connect('http://localhost:4000');
 
 function App() {
   const [user, setUser] = useState({ username: null });
-  const [room, setRoom] = useState('');
+  const [logedUsers, setLogedUsers] = useState([]);
+  const nav = useNavigate();
 
   const states = {
     socket,
     user,
     setUser,
-    room,
-    setRoom,
+    fetchUser,
+    logedUsers,
+    setLogedUsers,
   };
+
+  async function fetchUser(secret) {
+    const resp = await fetch(`http://localhost:4000/api/users/${secret}`);
+    const data = await resp.json();
+    if (!data.error) {
+      setUser(data.user);
+      // socket.emit('logedUsers', data.userId);
+    } else {
+      console.log('resp from server ===', data);
+      nav('/login');
+    }
+  }
 
   return (
     <MainContext.Provider value={states}>
